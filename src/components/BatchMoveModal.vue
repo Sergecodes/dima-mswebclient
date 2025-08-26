@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title text-light">New Batch Move</h5>
+          <h5 class="modal-title">New Batch Move</h5>
           <button
             type="button"
             class="btn-close btn-close-white"
@@ -23,11 +23,8 @@
               </div>
               <div class="col-md-4" v-if="type !== 'INBOUND'">
                 <label class="form-label">From</label>
-                <select
-                  v-model.number="from_location"
-                  class="form-select"
-                  :required="type !== 'INBOUND'"
-                >
+                <!-- already inside v-if, so just require -->
+                <select v-model.number="from_location" class="form-select" required>
                   <option disabled value="">Select source</option>
                   <option v-for="l in locations" :key="l.id" :value="l.id">
                     {{ l.code }} — {{ l.name }}
@@ -36,11 +33,8 @@
               </div>
               <div class="col-md-4" v-if="type !== 'OUTBOUND'">
                 <label class="form-label">To</label>
-                <select
-                  v-model.number="to_location"
-                  class="form-select"
-                  :required="type !== 'OUTBOUND'"
-                >
+                <!-- already inside v-if, so just require -->
+                <select v-model.number="to_location" class="form-select" required>
                   <option disabled value="">Select destination</option>
                   <option v-for="l in locations" :key="l.id" :value="l.id">
                     {{ l.code }} — {{ l.name }}
@@ -106,8 +100,8 @@
             Close
           </button>
           <button class="btn btn-primary" :disabled="saving" @click="save">
-            <span v-if="!saving">Create Batch</span
-            ><span v-else class="spinner-border spinner-border-sm"></span>
+            <span v-if="!saving">Create Batch</span>
+            <span v-else class="spinner-border spinner-border-sm"></span>
           </button>
         </div>
       </div>
@@ -119,7 +113,7 @@
 import { ref, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import api from "@/api/http";
-import type { Product, Location, StockMoveLine, MoveType } from "@/types";
+import type { Product, Location, StockMoveLine, MoveType } from "@/types/types";
 
 const emit = defineEmits<{ (e: "created"): void }>();
 

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title text-light">New Stock Move</h5>
+          <h5 class="modal-title">New Stock Move</h5>
           <button
             type="button"
             class="btn-close btn-close-white"
@@ -43,11 +43,8 @@
               </div>
               <div class="col-md-6" v-if="type !== 'INBOUND'">
                 <label class="form-label">From</label>
-                <select
-                  v-model.number="from_location"
-                  class="form-select"
-                  :required="type !== 'INBOUND'"
-                >
+                <!-- inside v-if, so just require -->
+                <select v-model.number="from_location" class="form-select" required>
                   <option disabled value="">Select source</option>
                   <option v-for="l in locations" :key="l.id" :value="l.id">
                     {{ l.code }} — {{ l.name }}
@@ -56,11 +53,8 @@
               </div>
               <div class="col-md-6" v-if="type !== 'OUTBOUND'">
                 <label class="form-label">To</label>
-                <select
-                  v-model.number="to_location"
-                  class="form-select"
-                  :required="type !== 'OUTBOUND'"
-                >
+                <!-- inside v-if, so just require -->
+                <select v-model.number="to_location" class="form-select" required>
                   <option disabled value="">Select destination</option>
                   <option v-for="l in locations" :key="l.id" :value="l.id">
                     {{ l.code }} — {{ l.name }}
@@ -76,8 +70,8 @@
             Close
           </button>
           <button class="btn btn-primary" :disabled="saving" @click="save">
-            <span v-if="!saving">Create</span
-            ><span v-else class="spinner-border spinner-border-sm"></span>
+            <span v-if="!saving">Create</span>
+            <span v-else class="spinner-border spinner-border-sm"></span>
           </button>
         </div>
       </div>
@@ -89,7 +83,7 @@
 import { ref, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import api from "@/api/http";
-import type { Product, Location, MoveType } from "@/types";
+import type { Product, Location, MoveType } from "@/types/types";
 
 const emit = defineEmits<{ (e: "created"): void }>();
 

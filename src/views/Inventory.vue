@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import api from "@/api/http";
-import type { InventoryLevel, Product, Location } from "@/types";
+import type { InventoryLevel, Product, Location } from "@/types/types";
 import { ref, onMounted } from "vue";
 
 const items = ref<InventoryLevel[]>([]);

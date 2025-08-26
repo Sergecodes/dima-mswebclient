@@ -3,7 +3,9 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title text-light">{{ form.id ? "Edit Product" : "New Product" }}</h5>
+          <h5 class="modal-title text-light">
+            {{ form.id ? "Edit Product" : "New Product" }}
+          </h5>
           <button
             type="button"
             class="btn-close btn-close-white"
@@ -83,7 +85,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import api from "@/api/http";
-import type { Product } from "@/types";
+import type { Product } from "@/types/types";
 
 const emit = defineEmits<{ (e: "saved"): void }>();
 

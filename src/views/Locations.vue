@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import api from "@/api/http";
-import type { Location } from "@/types";
+import type { Location } from "@/types/types";
 import { ref, onMounted, watch } from "vue";
 import LocationModal from "@/components/LocationModal.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";

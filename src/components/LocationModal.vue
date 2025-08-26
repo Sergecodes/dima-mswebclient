@@ -48,7 +48,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { Modal } from "bootstrap";
 import api from "@/api/http";
-import type { Location } from "@/types";
+import type { Location } from "@/types/types";
 
 const emit = defineEmits<{ (e: "saved"): void }>();
 

@@ -51,7 +51,9 @@ export interface StockMoveBatch {
   id: number;
   type: MoveType;
   from_location?: number | null;
+  from_code?: string | null; 
   to_location?: number | null;
+  to_code?: string | null;  
   timestamp: string;
   created_at: string;
   lines: StockMoveLine[];

@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import api from "@/api/http";
-import type { Product } from "@/types";
+import type { Product } from "@/types/types";
 import { ref, onMounted, watch } from "vue";
 import ProductModal from "@/components/ProductModal.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";

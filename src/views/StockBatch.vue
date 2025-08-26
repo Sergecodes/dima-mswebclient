@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import api from "@/api/http";
-import type { StockMoveBatch } from "@/types";
+import type { StockMoveBatch } from "@/types/types";
 import { ref, onMounted } from "vue";
 import BatchMoveModal from "@/components/BatchMoveModal.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";

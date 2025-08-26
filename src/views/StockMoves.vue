@@ -110,7 +110,7 @@
 
 <script setup lang="ts">
 import api from "@/api/http";
-import type { StockMove, Product, Location } from "@/types";
+import type { StockMove, Product, Location } from "@/types/types";
 import { ref, onMounted } from "vue";
 import StockMoveModal from "@/components/StockMoveModal.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
