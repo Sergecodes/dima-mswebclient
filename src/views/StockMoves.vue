@@ -2,7 +2,22 @@
   <div>
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h3 class="mb-0">Stock Moves</h3>
-      <button class="btn btn-success" @click="openCreate">New Move</button>
+      <button class="btn btn.success" @click="openCreate">New Move</button>
+    </div>
+
+    <!-- error alert (delete / load failures, etc.) -->
+    <div
+      v-if="errorMsg"
+      class="alert alert-warning alert-dismissible fade show"
+      role="alert"
+    >
+      <strong>Action failed:</strong> {{ errorMsg }}
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        @click="errorMsg = ''"
+      ></button>
     </div>
 
     <div class="card">
@@ -119,8 +134,8 @@ const items = ref<StockMove[]>([]);
 const products = ref<Product[]>([]);
 const locations = ref<Location[]>([]);
 const loading = ref(false);
+const errorMsg = ref("");
 
-// human-friendly filters
 const filters = ref<{
   type: string;
   product_sku: string;
@@ -155,6 +170,7 @@ async function fetchRefs() {
 
 async function fetchList() {
   loading.value = true;
+  errorMsg.value = "";
   try {
     const params: any = {};
     if (filters.value.type) params.type = filters.value.type;
@@ -163,6 +179,8 @@ async function fetchList() {
     if (filters.value.to_code) params.to_code = filters.value.to_code;
     const { data } = await api.get("/stock-moves/", { params });
     items.value = data.results || data;
+  } catch (e: any) {
+    errorMsg.value = e?.response?.data?.detail || "Failed to load moves.";
   } finally {
     loading.value = false;
   }
@@ -175,9 +193,13 @@ async function confirmDelete(id: number) {
     confirmText: "Delete",
     variant: "danger",
   });
-  if (ok) {
+  if (!ok) return;
+
+  try {
     await api.delete(`/stock-moves/${id}/`);
     await fetchList();
+  } catch (e: any) {
+    errorMsg.value = e?.response?.data?.detail || "Failed to delete this move.";
   }
 }
 

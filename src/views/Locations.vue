@@ -5,6 +5,21 @@
       <button class="btn btn-success" @click="openCreate">New Location</button>
     </div>
 
+    <!-- error alert -->
+    <div
+      v-if="errorMsg"
+      class="alert alert-warning alert-dismissible fade show"
+      role="alert"
+    >
+      <strong>Delete blocked:</strong> {{ errorMsg }}
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        @click="errorMsg = ''"
+      ></button>
+    </div>
+
     <div class="mb-3">
       <input
         v-model="search"
@@ -69,12 +84,14 @@ import ConfirmDialog from "@/components/ConfirmDialog.vue";
 const items = ref<Location[]>([]);
 const search = ref("");
 const loading = ref(false);
+const errorMsg = ref("");
 
 const modal = ref<InstanceType<typeof LocationModal> | null>(null);
 const confirmDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
 
 async function fetchList() {
   loading.value = true;
+  errorMsg.value = "";
   try {
     const params: any = {};
     if (search.value.trim()) params.search = search.value.trim();
@@ -99,9 +116,15 @@ async function confirmDelete(l: Location) {
     confirmText: "Delete",
     variant: "danger",
   });
-  if (ok) {
+  if (!ok) return;
+
+  try {
     await api.delete(`/locations/${l.id}/`);
     await fetchList();
+  } catch (e: any) {
+    errorMsg.value =
+      e?.response?.data?.detail ||
+      "Cannot delete this location because it is referenced by existing stock records.";
   }
 }
 

@@ -5,6 +5,21 @@
       <button class="btn btn-success" @click="openCreate">New Batch Move</button>
     </div>
 
+    <!-- error alert (delete / load failures, etc.) -->
+    <div
+      v-if="errorMsg"
+      class="alert alert-warning alert-dismissible fade show"
+      role="alert"
+    >
+      <strong>Action failed:</strong> {{ errorMsg }}
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        @click="errorMsg = ''"
+      ></button>
+    </div>
+
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Recent Batches</h5>
@@ -83,6 +98,7 @@ import ConfirmDialog from "@/components/ConfirmDialog.vue";
 
 const batches = ref<StockMoveBatch[]>([]);
 const loading = ref(false);
+const errorMsg = ref("");
 
 const modal = ref<InstanceType<typeof BatchMoveModal> | null>(null);
 const confirmDialog = ref<InstanceType<typeof ConfirmDialog> | null>(null);
@@ -93,9 +109,12 @@ function openCreate() {
 
 async function fetchBatches() {
   loading.value = true;
+  errorMsg.value = "";
   try {
     const { data } = await api.get("/stock-batches/?ordering=-timestamp");
     batches.value = data.results || data;
+  } catch (e: any) {
+    errorMsg.value = e?.response?.data?.detail || "Failed to load batches.";
   } finally {
     loading.value = false;
   }
@@ -108,9 +127,13 @@ async function confirmDelete(id: number) {
     confirmText: "Delete",
     variant: "danger",
   });
-  if (ok) {
+  if (!ok) return;
+
+  try {
     await api.delete(`/stock-batches/${id}/`);
     await fetchBatches();
+  } catch (e: any) {
+    errorMsg.value = e?.response?.data?.detail || "Failed to delete this batch.";
   }
 }
 
